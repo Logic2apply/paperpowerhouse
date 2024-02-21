@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}Download Your File{% endblock title %}
+{% block body %}
+<a href="/uploads/out/{{filename}}" download="true">Download here</a>
+{% endblock body %}

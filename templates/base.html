@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/output.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/paperpowerhouse.png') }}" type="image/x-icon">
+    <style>
+        *,
+        body {
+            transition-property: all;
+            transition-duration: 1s;
+            transition-timing-function: ease-in-out;
+
+        }
+    </style>
+    {% block css %}
+    {% endblock css %}
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header class="text-gray-400 bg-gray-900 body-font">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+            <a class="flex title-font font-medium items-center text-white mb-4 md:mb-0">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round"
+                    stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-red-500 rounded-full"
+                    viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg> -->
+                <img src="{{ url_for('static', filename='images/paperpowerhouse.png') }}" alt="logo"
+                    class="w-10 h-10 text-white bg-red-500 rounded-full">
+                <span class="ml-3 text-xl">PaperPowerhouse</span>
+            </a>
+            <nav
+                class="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-700	flex flex-wrap items-center text-base justify-center">
+                <a href="/" class="mr-5 hover:text-white">Home</a>
+                <a href="/pdf-tools" class="mr-5 hover:text-white">PDF Tools</a>
+                <a href="/about" class="mr-5 hover:text-white">About</a>
+                <a href="/contact" class="mr-5 hover:text-white">Contact</a>
+                {% if current_user.is_superuser %}
+                <a href="/view-contact" class="mr-5 hover:text-white">View Contacts</a>
+                {% endif %}
+            </nav>
+            {% if current_user.is_authenticated %}
+            <div class="bg-gray-800 rounded-lg px-3 py-1.5 mr-2 hover:bg-gray-700">{{current_user.name}}</div>
+            <a href="/logout"
+                class="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">Logout
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+            </a>
+            {% else %}
+            <a href="/#login"
+                class="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">Login
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7"></path>
+                </svg>
+            </a>
+            {% endif %}
+        </div>
+    </header>
+
+
+
+
+    <!-- Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    <div class="bg-gray-900 flex align-middle justify-center">
+        {% for category, message in messages %}
+        <div role="alert"
+            class="container relative flex w-full px-4 py-4 text-base text-white bg-green-900 rounded-lg font-regular"
+            data-dismissible="alert">
+            <div class="mr-12 ">{{message}}</div>
+            <button data-dismissible-target="alert"
+                class="!absolute  top-3 right-3 h-8 max-h-[32px] w-8 max-w-[32px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-white transition-all hover:bg-white/10 active:bg-white/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button">
+                <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        class="w-6 h-6" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endwith %}
+
+
+    {% block body %}
+
+    {% endblock body %}
+
+    <!-- JS -->
+    <script src="https://unpkg.com/@material-tailwind/html@latest/scripts/dismissible.js"></script>
+    {% block js %}
+
+    {% endblock js %}
+</body>
+
+</html>
